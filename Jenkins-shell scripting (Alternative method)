@@ -1,0 +1,24 @@
+#Go to your Jenkins server and follow the steps below:
+#Create a new item
+#Click on freestyle project option and give a name to it and click OK.
+#Click on the configure option on the left side tab and then go to Build Steps
+#In th drop down list, select execute shell command
+#Copy the script below then hit on Save at the bottom of the page.
+#Now build the project by clicking on Build now
+
+#Go to jenkins workspace directory on cli and create a directory within the workspace dir with the same name as that of Jenkins project name and now create another dir with name p1 inside of it.
+#pwd: cd /var/lib/jenkins/workspace/proj1/p1
+#Place app.js file in workspace dir
+
+cd p1
+cp /var/lib/jenkins/workspace/app.js .
+touch Dockerfile
+cat <<EOT>> Dockerfile
+FROM node:6
+WORKDIR /app
+COPY . /app
+EXPOSE 8000
+CMD ["node","app.js"]
+EOT
+docker build -t myimage1 .
+docker run --name appjs -itd -P myimage1
